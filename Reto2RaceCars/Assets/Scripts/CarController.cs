@@ -81,12 +81,12 @@ public class CarController : MonoBehaviour
             normalTarget = hit.normal;
         }
 
-        if(Physics.Raycast(groundRayPoint2.position, -transform.up, out hit, groundRayLength, whatIsGround))
-        {
-            grounded = true;
+       // if(Physics.Raycast(groundRayPoint2.position, -transform.up, out hit, groundRayLength, whatIsGround))
+       // {
+          //  grounded = true;
 
-            normalTarget = (normalTarget + hit.normal) / 2f;
-        }
+           // normalTarget = (normalTarget + hit.normal) / 2f;
+       // }//
 
       
         if(grounded)
