@@ -25,9 +25,10 @@ public class CarController : MonoBehaviour
     
     public Transform leftFrontWheel, rightFrontWheel;
     public float maxWheelTurn = 25f;
-    
-   
-   
+
+    public int nextCheckpoint;
+    public int currentLap;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,17 +53,17 @@ public class CarController : MonoBehaviour
                 }
 
                 turnInput = Input.GetAxis("Horizontal");
-
+        /*
                  if(grounded && Input.GetAxis("Vertical") != 0)
                 {
                     transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * (theRB.velocity.magnitude / maxSpeed), 0f));
                 } 
           
-            
+            */
             leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, (turnInput * maxWheelTurn) - 180, leftFrontWheel.localRotation.eulerAngles.z);
             rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, (turnInput * maxWheelTurn), rightFrontWheel.localRotation.eulerAngles.z);
 
-            transform.position = theRB.position;
+            //transform.position = theRB.position;
                
     }
     
@@ -81,12 +82,12 @@ public class CarController : MonoBehaviour
             normalTarget = hit.normal;
         }
 
-       // if(Physics.Raycast(groundRayPoint2.position, -transform.up, out hit, groundRayLength, whatIsGround))
-       // {
-          //  grounded = true;
+        if(Physics.Raycast(groundRayPoint2.position, -transform.up, out hit, groundRayLength, whatIsGround))
+        {
+            grounded = true;
 
-           // normalTarget = (normalTarget + hit.normal) / 2f;
-       // }//
+            normalTarget = (normalTarget + hit.normal) / 2f;
+        }
 
       
         if(grounded)
@@ -112,15 +113,29 @@ public class CarController : MonoBehaviour
         }
 
         //Debug.Log(theRB.velocity.magnitude);
-
+       
         transform.position = theRB.position;
 
         if (grounded && speedInput != 0)
         {
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * (theRB.velocity.magnitude / maxSpeed), 0f));
         }
-
+        
     }
 
- 
+    public void CheckpointHit(int cpNumber)
+    {
+        if (cpNumber == nextCheckpoint)
+        {
+            nextCheckpoint++;
+
+            if (nextCheckpoint == RaceManager.instance.allCheckpoints.Length)
+            {
+                nextCheckpoint = 0;
+                currentLap++;
+            }
+        }
+
+
+    }
 }
