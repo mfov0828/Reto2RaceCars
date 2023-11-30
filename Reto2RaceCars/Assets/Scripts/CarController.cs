@@ -29,6 +29,8 @@ public class CarController : MonoBehaviour
     public int nextCheckpoint;
     public int currentLap;
 
+    public float lapTime, bestLapTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,23 +38,27 @@ public class CarController : MonoBehaviour
 
         dragOnGround = theRB.drag;
 
+        UIManager.instance.lapCounterText.text = currentLap + "/" + RaceManager.instance.totalLaps;
     }
 
     // Update is called once per frame
     void Update()
     {
-       
-                speedInput = 0f;
-                if (Input.GetAxis("Vertical") > 0)
-                {
-                    speedInput = Input.GetAxis("Vertical") * forwardAccel;
-                }
-                else if (Input.GetAxis("Vertical") < 0)
-                {
-                    speedInput = Input.GetAxis("Vertical") * reverseAccel;
-                }
+        lapTime += Time.deltaTime;
+        var ts = System.TimeSpan.FromSeconds(lapTime);
+        UIManager.instance.currentLapTimeText.text = string.Format("{0:00}m{1:00}.{2:000}s", ts.Minutes, ts.Seconds, ts.Milliseconds);
 
-                turnInput = Input.GetAxis("Horizontal");
+        speedInput = 0f;
+        if (Input.GetAxis("Vertical") > 0)
+            {
+              speedInput = Input.GetAxis("Vertical") * forwardAccel;
+            }
+        else if (Input.GetAxis("Vertical") < 0)
+            {
+              speedInput = Input.GetAxis("Vertical") * reverseAccel;
+            }
+
+              turnInput = Input.GetAxis("Horizontal");
         /*
                  if(grounded && Input.GetAxis("Vertical") != 0)
                 {
@@ -132,10 +138,27 @@ public class CarController : MonoBehaviour
             if (nextCheckpoint == RaceManager.instance.allCheckpoints.Length)
             {
                 nextCheckpoint = 0;
-                currentLap++;
+                LapCompleted();
             }
         }
-
-
     }
+
+    public void LapCompleted()
+    {
+        currentLap++;
+
+        if (lapTime < bestLapTime || bestLapTime == 0)
+        {
+            bestLapTime = lapTime;
+        }
+
+        lapTime = 0f;
+
+        var ts = System.TimeSpan.FromSeconds(bestLapTime);
+        UIManager.instance.bestLapTimeText.text = string.Format("{0:00}m{1:00}.{2:000}s", ts.Minutes, ts.Seconds, ts.Milliseconds);
+
+        UIManager.instance.lapCounterText.text = currentLap + "/" + RaceManager.instance.totalLaps;
+            
+    }
+       
 }

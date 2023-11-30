@@ -10,10 +10,12 @@ public class CameraController : MonoBehaviour
     public float minDistance, maxDistance;
     private float activeDistance;
 
+    public Transform startTargetOffset;
+
 
     void Start()
     {
-        offsetDir = transform.position - target.transform.position;
+        offsetDir = transform.position - startTargetOffset.position;
 
         activeDistance = minDistance;
 
