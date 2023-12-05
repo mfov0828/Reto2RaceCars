@@ -5,10 +5,10 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager instance;
+     public static UIManager instance;
 
-    public TMP_Text lapCounterText, bestLapTimeText, currentLapTimeText;
-
+    public TMP_Text lapCounterText, bestLapTimeText, currentLapTimeText, positionText, countDownText, goText;
+    
     private void Awake()
     {
         instance = this;
