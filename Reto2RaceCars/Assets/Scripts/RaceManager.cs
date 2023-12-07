@@ -24,6 +24,8 @@ public class RaceManager : MonoBehaviour
     private float startCounter;
     public int countdownCurrent = 3;
 
+    public bool raceCompleted;
+
     private void Awake()
     {
         instance = this;
@@ -125,4 +127,37 @@ public class RaceManager : MonoBehaviour
 
         }
     }
+    public void FinishRace()
+    {
+        raceCompleted = true;
+
+
+        switch (playerPosition)
+        {
+            case 1:
+                UIManager.instance.raceResultText.text = "You finished 1st";
+
+                break;
+
+            case 2:
+                UIManager.instance.raceResultText.text = "You finished 2nd";
+
+                break;
+
+            case 3:
+                UIManager.instance.raceResultText.text = "You finished 3rd";
+
+                break;
+
+            default:
+
+                UIManager.instance.raceResultText.text = "You finished " + playerPosition + "th";
+
+                break;
+        }
+
+
+        UIManager.instance.resultsScreen.SetActive(true);
+    }
+
 }
